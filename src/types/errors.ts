@@ -18,6 +18,7 @@ export interface IAuthError {
 	WRONG_EMAIL: IErrorObj;
 	EMPTY_PASSWORD: IErrorObj;
 	WEAK_PASSWORD: IErrorObj;
+	USER_NOT_FOUND: IErrorObj;
 }
 
 export interface IDBErrors {
