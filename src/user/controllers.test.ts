@@ -59,12 +59,10 @@ describe('POST /signup', () => {
 				password: 'password',
 			})
 			.expect(400, {
-				error: {
-					name: 'EMPTY_EMAIL',
-					code: 400,
-					message: 'Email cannot be empty',
-					domain: 'authentication',
-				},
+				name: 'EMPTY_EMAIL',
+				code: 400,
+				message: 'Email cannot be empty',
+				domain: 'authentication',
 			});
 	});
 
@@ -77,12 +75,10 @@ describe('POST /signup', () => {
 				password: 'password',
 			})
 			.expect(400, {
-				error: {
-					name: 'WRONG_EMAIL',
-					code: 400,
-					message: 'Please fill a valid email address',
-					domain: 'authentication',
-				},
+				name: 'WRONG_EMAIL',
+				code: 400,
+				message: 'Please fill a valid email address',
+				domain: 'authentication',
 			});
 	});
 
@@ -94,12 +90,10 @@ describe('POST /signup', () => {
 				email: 'example@example.com',
 			})
 			.expect(400, {
-				error: {
-					name: 'EMPTY_PASSWORD',
-					code: 400,
-					message: 'Password cannot be empty',
-					domain: 'authentication',
-				},
+				name: 'EMPTY_PASSWORD',
+				code: 400,
+				message: 'Password cannot be empty',
+				domain: 'authentication',
 			});
 	});
 
@@ -112,12 +106,10 @@ describe('POST /signup', () => {
 				password: 'pass',
 			})
 			.expect(400, {
-				error: {
-					name: 'WEAK_PASSWORD',
-					code: 400,
-					message: 'Password must have at least 6 characters',
-					domain: 'authentication',
-				},
+				name: 'WEAK_PASSWORD',
+				code: 400,
+				message: 'Password must have at least 6 characters',
+				domain: 'authentication',
 			});
 	});
 
@@ -139,12 +131,10 @@ describe('POST /signup', () => {
 				password: 'password',
 			})
 			.expect(400, {
-				error: {
-					name: 'EMAIL_EXIST',
-					code: 400,
-					message: 'The email address is already in use by another account',
-					domain: 'authentication',
-				},
+				name: 'EMAIL_EXIST',
+				code: 400,
+				message: 'The email address is already in use by another account',
+				domain: 'authentication',
 			});
 	});
 });

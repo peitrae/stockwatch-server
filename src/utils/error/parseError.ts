@@ -25,12 +25,7 @@ const parseError = (
 		result = errors[domain][err];
 	}
 
-	return {
-		error: {
-			...result,
-			domain,
-		},
-	};
+	return { ...result, domain };
 };
 
 export default parseError;

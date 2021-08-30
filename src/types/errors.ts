@@ -1,8 +1,4 @@
 export interface IError {
-	error: IErrorObj;
-}
-
-export interface IErrorObj {
 	name: string;
 	code: number;
 	message: string;
@@ -14,17 +10,17 @@ export interface IErrorDomain {
 }
 
 export interface IAuthError {
-	EMPTY_EMAIL: IErrorObj;
-	WRONG_EMAIL: IErrorObj;
-	EMPTY_PASSWORD: IErrorObj;
-	WEAK_PASSWORD: IErrorObj;
+	EMPTY_EMAIL: IError;
+	WRONG_EMAIL: IError;
+	EMPTY_PASSWORD: IError;
+	WEAK_PASSWORD: IError;
 }
 
 export interface IDBErrors {
-	11000: IErrorObj;
+	11000: IError;
 }
 
-export interface IErrorParamsObj extends Omit<IErrorObj, 'name' | 'code'> {
+export interface IErrorParamsObj extends Omit<IError, 'name' | 'code'> {
 	name: 'MongooseError' | 'MongoError';
 	code: keyof IDBErrors;
 }

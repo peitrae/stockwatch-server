@@ -38,6 +38,6 @@ export const signup: RequestHandler = async (req, res) => {
 	} catch (err) {
 		const parsedError = parseError(err, 'authentication');
 
-		res.status(parsedError.error.code).send(parsedError);
+		res.status(parsedError.code).send(parsedError);
 	}
 };
