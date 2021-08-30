@@ -12,7 +12,7 @@ describe('POST /signup', () => {
 		const res = await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example@example.com',
 				password: 'password',
 			})
@@ -20,7 +20,7 @@ describe('POST /signup', () => {
 
 		const user = await UserModel.findOne({ email: 'example@example.com' });
 
-		expect(user.displayName).toBeTruthy();
+		expect(user.name).toBeTruthy();
 		expect(user.password).toBeTruthy();
 
 		expect(res.body).toMatchObject({
@@ -30,11 +30,11 @@ describe('POST /signup', () => {
 		});
 	});
 
-	it('sould create an account without a displayName', async () => {
+	it('sould create an account without a name', async () => {
 		const res = await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: null,
+				name: null,
 				email: 'example@example.com',
 				password: 'password',
 			})
@@ -55,7 +55,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				password: 'password',
 			})
 			.expect(400, {
@@ -70,7 +70,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example',
 				password: 'password',
 			})
@@ -86,7 +86,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example@example.com',
 			})
 			.expect(400, {
@@ -101,7 +101,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example@example.com',
 				password: 'pass',
 			})
@@ -117,7 +117,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example@example.com',
 				password: 'password',
 			})
@@ -126,7 +126,7 @@ describe('POST /signup', () => {
 		await request(app)
 			.post('/api/v1/user/signup')
 			.send({
-				displayName: 'Example',
+				name: 'Example',
 				email: 'example@example.com',
 				password: 'password',
 			})
