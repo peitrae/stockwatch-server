@@ -25,7 +25,7 @@ describe('POST /signup', () => {
 
 		const user = await UserModel.findOne({ email });
 
-		expect(user.displayName).toBeTruthy();
+		expect(user.name).toBeTruthy();
 		expect(user.password).toBeTruthy();
 
 		expect(res.body).toMatchObject({
@@ -35,7 +35,7 @@ describe('POST /signup', () => {
 		});
 	});
 
-	it('sould create an account without a displayName', async () => {
+	it('sould create an account without a name', async () => {
 		const email = randomEmail;
 
 		const res = await request(app)
@@ -61,16 +61,14 @@ describe('POST /signup', () => {
 		await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName: randomString,
+				name: randomString,
 				password: randomString,
 			})
 			.expect(400, {
-				error: {
-					name: 'EMPTY_EMAIL',
-					code: 400,
-					message: 'Email cannot be empty',
-					domain: 'authentication',
-				},
+				name: 'EMPTY_EMAIL',
+				code: 400,
+				message: 'Email cannot be empty',
+				domain: 'authentication',
 			});
 	});
 
@@ -78,17 +76,15 @@ describe('POST /signup', () => {
 		await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName: randomString,
+				name: randomString,
 				email: randomEmail + '1',
 				password: randomString,
 			})
 			.expect(400, {
-				error: {
-					name: 'WRONG_EMAIL',
-					code: 400,
-					message: 'Please fill a valid email address',
-					domain: 'authentication',
-				},
+				name: 'WRONG_EMAIL',
+				code: 400,
+				message: 'Please fill a valid email address',
+				domain: 'authentication',
 			});
 	});
 
@@ -96,16 +92,14 @@ describe('POST /signup', () => {
 		await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName: randomString,
-				email: randomEmail,
+				name: randomString,
+				email: randomString,
 			})
 			.expect(400, {
-				error: {
-					name: 'EMPTY_PASSWORD',
-					code: 400,
-					message: 'Password cannot be empty',
-					domain: 'authentication',
-				},
+				name: 'EMPTY_PASSWORD',
+				code: 400,
+				message: 'Password cannot be empty',
+				domain: 'authentication',
 			});
 	});
 
@@ -113,29 +107,27 @@ describe('POST /signup', () => {
 		await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName: randomString,
+				name: randomEmail,
 				email: randomEmail,
 				password: randomString.slice(0, 5),
 			})
 			.expect(400, {
-				error: {
-					name: 'WEAK_PASSWORD',
-					code: 400,
-					message: 'Password must have at least 6 characters',
-					domain: 'authentication',
-				},
+				name: 'WEAK_PASSWORD',
+				code: 400,
+				message: 'Password must have at least 6 characters',
+				domain: 'authentication',
 			});
 	});
 
 	it('should tell the account already exists', async () => {
-		const { displayName, email, password } = await registerAccount(
+		const { name, email, password } = await registerAccount(
 			request(app)
 		);
 
 		await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName,
+				name,
 				email,
 				password,
 			})

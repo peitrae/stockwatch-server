@@ -6,7 +6,7 @@ import authconfig from '../config/authconfig';
 
 export interface IUser {
 	localId: string;
-	displayName?: string;
+	name?: string;
 	email: string;
 	password: string;
 	createdAt: Date;
@@ -26,7 +26,7 @@ interface ITokenizedUser
 
 const UserSchema = new Schema<IUser>(
 	{
-		displayName: {
+		name: {
 			type: String,
 			trim: true,
 		},

@@ -6,7 +6,7 @@ import parseError from '../utils/error/parseError';
 import isEmail from '../utils/validation/isEmail';
 
 export const signup: RequestHandler = async (req, res) => {
-	const { displayName, email, password } = req.body;
+	const { name, email, password } = req.body;
 
 	try {
 		if (email === undefined) {
@@ -25,7 +25,7 @@ export const signup: RequestHandler = async (req, res) => {
 			throw 'WEAK_PASSWORD';
 		}
 
-		const user = await UserModel.create({ displayName, email, password });
+		const user = await UserModel.create({ name, email, password });
 
 		const { token, refreshToken } = user.generateToken();
 
@@ -38,7 +38,7 @@ export const signup: RequestHandler = async (req, res) => {
 	} catch (err) {
 		const parsedError = parseError(err, 'authentication');
 
-		res.status(parsedError.error.code).send(parsedError);
+		res.status(parsedError.code).send(parsedError);
 	}
 };
 
