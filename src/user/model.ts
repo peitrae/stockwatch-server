@@ -56,6 +56,14 @@ UserSchema.pre('save', async function (next) {
 	next();
 });
 
+UserSchema.methods.isPasswordValid = async function (password: string) {
+	const user = this;
+
+	const compare = await bcrypt.compare(password, user.password);
+
+	return compare;
+};
+
 UserSchema.methods.generateToken = function () {
 	const user = this;
 

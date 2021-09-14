@@ -19,6 +19,11 @@ const authErrors = {
 		code: 400,
 		message: 'Password must have at least 6 characters',
 	},
+	USER_NOT_FOUND: {
+		name: 'USER_NOT_FOUND',
+		code: 400,
+		message: 'User not found',
+	},
 };
 
 export default authErrors;
