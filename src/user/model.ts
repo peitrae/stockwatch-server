@@ -57,11 +57,11 @@ UserSchema.methods.generateToken = function () {
 	delete userObj.updatedAt;
 	delete userObj.password;
 
-	const token = jwt.sign({ ...userObj }, authconfig.token_secret, {
+	const token = jwt.sign(userObj, authconfig.token_secret, {
 		expiresIn: authconfig.token_life,
 	});
 
-	const refreshToken = jwt.sign({ ...user }, authconfig.refresh_token_secret, {
+	const refreshToken = jwt.sign(userObj, authconfig.refresh_token_secret, {
 		expiresIn: authconfig.refresh_token_life,
 	});
 
