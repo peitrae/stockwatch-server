@@ -1,9 +1,9 @@
 import request from 'supertest';
 
-import app from '../express';
-import { randomEmail, randomString, registerAccount } from '../test/utils';
-import setup from '../test/setup';
-import UserModel from './model';
+import app from '../../express';
+import { randomEmail, randomString, registerAccount } from '../../test/utils';
+import setup from '../../test/setup';
+import UserModel from '../../user/model';
 
 setup('sw-test-user');
 
