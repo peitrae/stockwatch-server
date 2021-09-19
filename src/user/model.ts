@@ -1,30 +1,11 @@
-import mongoose, { Document, LeanDocument, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import authconfig from '../config/authconfig';
+import { IUserSchema, IUserObject } from '../types/user';
 
-export interface IUser {
-	localId: string;
-	name?: string;
-	email: string;
-	password: string;
-	createdAt: Date;
-	updatedAt: Date;
-	isValidPassword: (password: string) => boolean;
-}
-
-interface ITokenizedUser
-	extends Omit<
-		LeanDocument<IUser & Document<any, any, IUser>>,
-		'password' | 'createdAt' | 'updatedAt'
-	> {
-	password?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-}
-
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUserSchema>(
 	{
 		name: {
 			type: String,
@@ -67,7 +48,7 @@ UserSchema.methods.isPasswordValid = async function (password: string) {
 UserSchema.methods.generateToken = function () {
 	const user = this;
 
-	let userObj: ITokenizedUser = user.toObject();
+	let userObj: IUserObject = user.toObject();
 
 	userObj.localId = user._id;
 
