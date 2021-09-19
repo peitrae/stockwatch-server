@@ -1,29 +1,23 @@
-import { ApolloServer, gql } from 'apollo-server-express';
+import 'reflect-metadata';
+import http from 'http';
 
 import './db/mongoose';
 import app from './express';
+import apollo from './config/apollo';
 
 const main = async () => {
-	const typeDefs = gql`
-		type Query {
-			hello: String
-		}
-	`;
+	const httpServer = http.createServer(app);
+	const apolloServer = (await apollo()).server;
 
-	// Provide resolver functions for your schema fields
-	const resolvers = {
-		Query: {
-			hello: () => 'Hello world!',
-		},
-	};
+	await apolloServer.start();
+	apolloServer.applyMiddleware({ app, path: '/api' });
 
-	const server = new ApolloServer({ typeDefs, resolvers });
+	await new Promise<void>((resolve) =>
+		httpServer.listen({ port: 4000 }, resolve)
+	);
 
-	await server.start();
-	server.applyMiddleware({ app });
-
-	app.listen({ port: 4000 }, () =>
-		console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+	console.log(
+		`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
 	);
 };
 

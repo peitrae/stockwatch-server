@@ -24,6 +24,21 @@ const authErrors = {
 		code: 400,
 		message: 'User not found',
 	},
+	TOKEN_IS_EMPTY: {
+		name: 'TOKEN_IS_EMPTY',
+		code: 401,
+		message: 'Token is empty',
+	},
+	TokenExpiredError: {
+		name: 'TOKEN_IS_EXPIRED',
+		code: 401,
+		message: 'Token is expired',
+	},
+	JsonWebTokenError: {
+		name: 'TOKEN_IS_INVALID',
+		code: 401,
+		message: 'Token is invalid',
+	},
 };
 
 export default authErrors;
