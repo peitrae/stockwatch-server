@@ -4,9 +4,9 @@ import UserModel from '../user/model';
 import { IUserObject } from '../types/user';
 
 interface ICreateUserParams {
-	createdAt: boolean;
-	updatedAt: boolean;
-	password: boolean;
+	createdAt?: boolean;
+	updatedAt?: boolean;
+	password?: boolean;
 }
 
 export const randomString = Math.random().toString(36).replace('0.', '');
@@ -38,16 +38,16 @@ export const createUser = async (
 	userObj.localId = user._id.toString();
 	delete userObj._id;
 
-	if (params && !params.createdAt) {
-		delete user.createdAt;
+	if (params === undefined || (params && !params.createdAt)) {
+		delete userObj.createdAt;
 	}
 
-	if (params && !params.updatedAt) {
-		delete user.updatedAt;
+	if (params === undefined || (params && !params.updatedAt)) {
+		delete userObj.updatedAt;
 	}
 
-	if (params && !params.password) {
-		delete user.password;
+	if (params === undefined || (params && !params.password)) {
+		delete userObj.password;
 	}
 
 	return userObj;

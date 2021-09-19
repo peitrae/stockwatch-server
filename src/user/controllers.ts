@@ -1,9 +1,11 @@
 import { RequestHandler } from 'express';
+import jwt from 'jsonwebtoken';
 
 import authconfig from '../config/authconfig';
 import UserModel from './model';
 import parseError from '../utils/error/parseError';
 import isEmail from '../utils/validation/isEmail';
+import { IUser } from '../types/user';
 
 export const signup: RequestHandler = async (req, res) => {
 	const { name, email, password } = req.body;
@@ -83,6 +85,45 @@ export const login: RequestHandler = async (req, res) => {
 		});
 	} catch (err) {
 		const parsedError = parseError(err, 'authentication');
+
+		res.status(parsedError.code).send(parsedError);
+	}
+};
+
+export const exhangeRefreshToken: RequestHandler = async (req, res) => {
+	const encodedRefreshToken = req.body.refreshToken;
+
+	try {
+		if (!encodedRefreshToken) {
+			throw 'MISSING_REFRESH_TOKEN';
+		}
+
+		const decodedJWT = jwt.verify(
+			encodedRefreshToken,
+			authconfig.refresh_token_secret
+		) as IUser;
+
+		const user = await UserModel.findById(decodedJWT.localId);
+
+		if (!user) {
+			throw 'USER_NOT_FOUND';
+		}
+
+		const { token, refreshToken } = user.generateToken();
+
+		res.status(200).send({
+			token,
+			refreshToken,
+			expiresIn: authconfig.refresh_token_life,
+		});
+	} catch (err) {
+		let parsedError;
+
+		if (err.name) {
+			parsedError = parseError(err.name, 'authentication');
+		} else {
+			parsedError = parseError(err, 'authentication');
+		}
 
 		res.status(parsedError.code).send(parsedError);
 	}

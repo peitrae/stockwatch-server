@@ -1,9 +1,16 @@
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 
 import app from '../../express';
-import { randomEmail, randomString, registerAccount } from '../../test/utils';
+import {
+	createUser,
+	randomEmail,
+	randomString,
+	registerAccount,
+} from '../../test/utils';
 import setup from '../../test/setup';
 import UserModel from '../../user/model';
+import authconfig from '../../config/authconfig';
 
 setup('sw-test-user');
 
@@ -221,5 +228,35 @@ describe('POST /login', () => {
 				message: 'Password must have at least 6 characters',
 				domain: 'authentication',
 			});
+	});
+});
+
+describe('POST /refresh-token', () => {
+	it('should exchange the refresh token with the new token', async () => {
+		const user = await createUser();
+
+		const refreshToken = jwt.sign(user, authconfig.refresh_token_secret, {
+			expiresIn: authconfig.refresh_token_life,
+		});
+
+		const res = await request(app)
+			.post(`${BASE_URL}/refresh-token`)
+			.send({ refreshToken })
+			.expect(200);
+
+		const decodedResToken = jwt.verify(res.body.token, authconfig.token_secret);
+		const decodedResRefreshToken = jwt.verify(
+			res.body.refreshToken,
+			authconfig.refresh_token_secret
+		);
+
+		expect(res.body).toEqual({
+			token: expect.any(String),
+			refreshToken: expect.any(String),
+			expiresIn: 604800,
+		});
+
+		expect(decodedResToken).toMatchObject(user);
+		expect(decodedResRefreshToken).toMatchObject(user);
 	});
 });
