@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import request from 'supertest';
 
 import app from '../express';
@@ -17,7 +16,7 @@ describe('POST /signup', () => {
 		const res = await request(app)
 			.post(`${BASE_URL}/signup`)
 			.send({
-				displayName: randomString,
+				name: randomString,
 				email,
 				password: randomString,
 			})
@@ -93,7 +92,7 @@ describe('POST /signup', () => {
 			.post(`${BASE_URL}/signup`)
 			.send({
 				name: randomString,
-				email: randomString,
+				email: randomEmail,
 			})
 			.expect(400, {
 				name: 'EMPTY_PASSWORD',
@@ -120,9 +119,7 @@ describe('POST /signup', () => {
 	});
 
 	it('should tell the account already exists', async () => {
-		const { name, email, password } = await registerAccount(
-			request(app)
-		);
+		const { name, email, password } = await registerAccount(request(app));
 
 		await request(app)
 			.post(`${BASE_URL}/signup`)
@@ -132,12 +129,10 @@ describe('POST /signup', () => {
 				password,
 			})
 			.expect(400, {
-				error: {
-					name: 'EMAIL_EXIST',
-					code: 400,
-					message: 'The email address is already in use by another account',
-					domain: 'authentication',
-				},
+				name: 'EMAIL_EXIST',
+				code: 400,
+				message: 'The email address is already in use by another account',
+				domain: 'authentication',
 			});
 	});
 });
@@ -165,12 +160,10 @@ describe('POST /login', () => {
 			.post(`${BASE_URL}/login`)
 			.send({ email: '1' + email, password })
 			.expect(400, {
-				error: {
-					name: 'USER_NOT_FOUND',
-					code: 400,
-					message: 'User not found',
-					domain: 'authentication',
-				},
+				name: 'USER_NOT_FOUND',
+				code: 400,
+				message: 'User not found',
+				domain: 'authentication',
 			});
 	});
 
@@ -181,12 +174,10 @@ describe('POST /login', () => {
 			.post(`${BASE_URL}/login`)
 			.send({ password })
 			.expect(400, {
-				error: {
-					name: 'EMPTY_EMAIL',
-					code: 400,
-					message: 'Email cannot be empty',
-					domain: 'authentication',
-				},
+				name: 'EMPTY_EMAIL',
+				code: 400,
+				message: 'Email cannot be empty',
+				domain: 'authentication',
 			});
 	});
 
@@ -200,29 +191,22 @@ describe('POST /login', () => {
 				password,
 			})
 			.expect(400, {
-				error: {
-					name: 'WRONG_EMAIL',
-					code: 400,
-					message: 'Please fill a valid email address',
-					domain: 'authentication',
-				},
+				name: 'WRONG_EMAIL',
+				code: 400,
+				message: 'Please fill a valid email address',
+				domain: 'authentication',
 			});
 	});
 
 	it('should tell the password is empty', async () => {
 		const { email } = await registerAccount(request(app));
 
-		await request(app)
-			.post(`${BASE_URL}/login`)
-			.send({ email })
-			.expect(400, {
-				error: {
-					name: 'EMPTY_PASSWORD',
-					code: 400,
-					message: 'Password cannot be empty',
-					domain: 'authentication',
-				},
-			});
+		await request(app).post(`${BASE_URL}/login`).send({ email }).expect(400, {
+			name: 'EMPTY_PASSWORD',
+			code: 400,
+			message: 'Password cannot be empty',
+			domain: 'authentication',
+		});
 	});
 
 	it('should tell the password is less than 6 characters', async () => {
@@ -232,12 +216,10 @@ describe('POST /login', () => {
 			.post(`${BASE_URL}/login`)
 			.send({ email, password: password.slice(0, 5) })
 			.expect(400, {
-				error: {
-					name: 'WEAK_PASSWORD',
-					code: 400,
-					message: 'Password must have at least 6 characters',
-					domain: 'authentication',
-				},
+				name: 'WEAK_PASSWORD',
+				code: 400,
+				message: 'Password must have at least 6 characters',
+				domain: 'authentication',
 			});
 	});
 });
